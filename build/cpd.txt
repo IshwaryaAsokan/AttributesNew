@@ -1,0 +1,143 @@
+Found a 46 line (322 tokens) duplication in the following files: 
+Starting at line 153 of C:\Users\Nisha\git\AttributesNew\src\com\kohler\importer\ProgressBarImpl2.java
+Starting at line 713 of C:\Users\Nisha\git\AttributesNew\src\com\kohler\importer\ProgressBarImpl2.java
+
+	private final static String SACK = "SACK";
+	private final static String NBKR = "NBKR";
+	private final static String STRLDISC = "STRLDISC";
+	private final static String MCGR = "MCGR";
+	private final static String KPNA = "KPNA";
+	private final static String KALS = "KALS";
+	private final static String RBRN = "RBRN";
+	private final static String INDI = "INDI";
+	private final static String DFON = "DFON";
+	private final static String DFNS = "DFNS";
+	private final static String KMEE = "KMEE";
+	private final static String POWR = "POWR";
+	private final static String STRL = "STRL";
+	private final static String BAKR = "BAKR";
+	private final static String ENGL = "ENGL";
+	private final static String HYTC = "HYTC";
+	private final static String GRMY = "GRMY";
+	private final static String KMEX = "KMEX";
+	private final static String KOUK = "KOUK";
+	private final static String MODS = "MODS";
+	private final static String SPRT = "SPRT";
+	private final static String VIGN = "VIGN";
+	private final static String RESI = "RESI";
+	private final static String ENGN = "ENGN";
+	private final static String PORT = "PORT";
+	private final static String ENGC = "ENGC";
+	private final static String ENGM = "ENGM";
+	private final static String CNUC = "CNUC";
+	private final static String CNTR = "CNTR";
+	private final static String KREA = "KREA";
+	private final static String KMAP = "KMAP";
+	private final static String MIRA = "MIRA";
+	private final static String NKUK = "NKUK";
+	private final static String PWRC = "PWRC";
+	private final static String RADA = "RADA";
+	private final static String ANNS = "ANNS";
+	private final static String NDST = "NDST";
+	private final static String ASIA = "ASIA";
+	private final static String T_KPNA = "T_KPNA";
+	private final static String T_SPRT = "T_SPRT";
+	private final static String KBRZ = "KBRZ";
+	private final static String KALL = "KALL";
+	private final static String INDA = "INDIA (2016)";
+	private final static String STEX = "Store Experience";
+	private final static String LAMX = "LAMX";
+	private final static String HTEC = "HTEC";
+=====================================================================
+Found a 14 line (92 tokens) duplication in the following files: 
+Starting at line 331 of C:\Users\Nisha\git\AttributesNew\src\com\kohler\importer\DatabaseDriver.java
+Starting at line 556 of C:\Users\Nisha\git\AttributesNew\src\com\kohler\importer\DatabaseDriver.java
+
+				nextValueList = (ValueList)attributeStatementIterator.next();
+				itemNo = nextValueList.getItemId();
+				ArrayList nextValuesArrayList = nextValueList.getValues();
+
+				if (nextValuesArrayList != null && !nextValuesArrayList.isEmpty()) {
+					for (int counter = 0; counter < nextValuesArrayList.size(); counter++) {
+						values = (Values)nextValuesArrayList.get(counter);
+	
+						if(values.getAction().equals("EMPTY")){
+							// DO NOTHING
+						}
+						else if (values.getAction().equals("ADD")) {
+	
+							PreparedStatement findTable = connection
+=====================================================================
+Found a 26 line (80 tokens) duplication in the following files: 
+Starting at line 73 of C:\Users\Nisha\git\AttributesNew\src\com\kohler\importer\FileDriver.java
+Starting at line 193 of C:\Users\Nisha\git\AttributesNew\src\com\kohler\importer\FileDriver.java
+
+    public HashMap validateAndPopulateHeader(String tabName, HashMap databaseHashMap) throws Exception
+    {
+        // Used to store exceptions from the excel document that was found
+        StringBuffer exceptionStringBuffer = new StringBuffer();
+
+    	Workbook workBook = null;
+       
+       Sheet sheet = null;
+       Iterator rows = null;
+
+       // Hashmap of the header row from the spreadsheet, used as the return object.
+       HashMap headerRowHashMap = new HashMap();
+       
+       try
+       {
+           
+           // Get the Workbook
+           workBook = new HSSFWorkbook(pfs);
+           try{
+        	   sheet = workBook.getSheet(tabName);
+        	   if(sheet == null){
+        		   throw new Exception("ERROR, NO SHEET EXITS");
+        	   }
+           }
+           catch(Exception e){
+        	   exceptionStringBuffer.append("FD000 - The " + tabName + " Tab does not exist");
+=====================================================================
+Found a 16 line (61 tokens) duplication in the following files: 
+Starting at line 520 of C:\Users\Nisha\git\AttributesNew\src\com\kohler\importer\DatabaseDriver.java
+Starting at line 638 of C:\Users\Nisha\git\AttributesNew\src\com\kohler\importer\DatabaseDriver.java
+
+							}
+							select.close();
+							resultSet.close();
+						}
+					}
+				}
+			}
+		}
+		catch(Exception e){
+			logger.error(e.toString());
+			logger.error(e.getMessage());
+			logger.error(e.getStackTrace());
+			e.printStackTrace();
+			throw e;
+		}
+	}
+=====================================================================
+Found a 17 line (57 tokens) duplication in the following files: 
+Starting at line 98 of C:\Users\Nisha\git\AttributesNew\src\com\kohler\importer\FileDriver.java
+Starting at line 216 of C:\Users\Nisha\git\AttributesNew\src\com\kohler\importer\FileDriver.java
+
+        	   exceptionStringBuffer.append("FD000 - The " + tabName + " Tab does not exist");
+        	   
+        	   throw new Exception(exceptionStringBuffer.toString());
+           }
+           // Get the row iterator
+           rows = sheet.rowIterator();
+           
+           // Used in the First Row Cells Iterator
+           Cell nextCell;
+           
+           // Counts the number of cells in the row
+           int firstRowCounter = 0;
+           
+           // This is the first row check for header information
+           if(rows.hasNext()){
+        	   Row firstRow = (Row)rows.next();
+        	   Iterator firstRowCells = firstRow.cellIterator();
