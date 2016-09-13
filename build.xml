@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Attr New project" basedir=".">
+
+	<property name="build.dir" value="${basedir}/build" />
+	<property name="src" value="${basedir}/src" />
+	<property name="bin" value="${build.dir}/bin" />
+	<property name="lib" value="${basedir}/lib" />
+	<property name="target.dir" value="${basedir}/dist" />
+	<property name="junit.report" value="${build.dir}/report" />
+	<property name="style" value="${basedir}/style" />
+	<property name="pmd.report" value="${build.dir}/pmd" />
+
+
+	<target name="create_run_jar" depends="compile, default, runTests, pmd">
+		<jar destfile="${target.dir}/AttributesNew.jar">
+			<manifest>
+				<attribute name="Main-Class" value="com.kohler.importer.Main" />
+				<attribute name="Class-Path" value="${manifest_cp_mod}" />
+			</manifest>
+			<fileset dir="${build.dir}" includes="**/*" excludes="**/dist/**,**/test/**,**/bin/**,**/build/**,**/Resources/**,**/Documentation/**" />
+			<fileset dir="${lib}/.." includes="lib/**/*" />
+			<fileset dir="${bin}" includes="**/*" />
+		</jar>
+	</target>
+
+	<path id="junit.classpath">
+		<pathelement path="${bin}"/>
+		<fileset dir="${lib}">
+			<include name="*.*" />
+		</fileset>
+	</path>
+
+	<path id="compileclasspath">
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${lib}">
+			<include name="**/*.zip" />
+		</fileset>
+		<fileset dir="${build.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<property name="dep_cp" value="${toString:dep.runtime}" />
+
+	<target name="default">
+		<manifestclasspath property="manifest_cp" jarfile="AttributesNew.jar">
+			<classpath refid="compileclasspath" />
+		</manifestclasspath>
+
+		<loadresource property="manifest_cp_mod">
+			<propertyresource name="manifest_cp" />
+			<filterchain>
+				<tokenfilter>
+					<filetokenizer />
+					<replacestring from="lib/" to="../lib/" />
+					<replacestring from="build/" to="../" />
+				</tokenfilter>
+			</filterchain>
+		</loadresource>
+
+
+		<echo message="Build Classpath: ${dep_cp}" />
+		<echo message="Manifest Classpath: ${manifest_cp_mod}" />
+	</target>
+
+	<target name="compile" depends="clean">
+		<mkdir dir="${bin}" />
+		<javac srcdir="${src}" destdir="${bin}" target="1.8" source="1.8">
+			<classpath refid="compileclasspath" />
+		</javac>
+		<copy todir="${bin}">
+		    <fileset dir="${basedir}/resources"/>
+		  </copy>
+		<!-- jar destfile="${build.dir}/CPDBTransformationalOutput.app.jar">
+			<fileset dir="${bin}" />
+		</jar -->
+		<jar destfile="${build.dir}/AttributesNew.sources.jar">
+			<fileset dir="${src}" includes="**/*.java" />
+		</jar>
+		
+		<taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" />
+		<cpd minimumTokenCount="50" outputFile="${build.dir}/cpd.txt">
+			<fileset dir="${basedir}/src">
+				<include name="**/*.java"/>
+			</fileset>
+		</cpd>
+				
+	</target>
+
+	<target name="clean">
+		<delete dir="${bin}" failonerror="no" />
+		<delete dir="${build.dir}" failonerror="no" />
+		<delete file="${target.dir}/KeywordAttributeImporter.jar" failonerror="no" />
+		<delete dir="${junit.report}" failonerror="no" />
+	</target>
+
+
+	<target name="pmd">
+		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask"/>
+		
+		<pmd shortFilenames="true">
+			<ruleset>style/rulesets.xml</ruleset>
+			<formatter type="html" toFile="pmd_report.html" />
+			<fileset dir="${basedir}/src">
+				<include name="**/*.java"/>
+			</fileset>
+		</pmd>
+		
+		
+	</target>
+			
+	<target name="runTests">
+		<mkdir dir="${junit.report}" />
+		<junit printsummary="yes" showoutput="yes"  haltonfailure="no">
+		    <formatter type="xml"/>
+			<classpath location="lib\junit-4.11.jar" />
+			<classpath refid="junit.classpath"/>
+		    <batchtest fork="yes" todir="${junit.report}">
+		        <fileset dir="src">
+		            <include name="**/*Test*.java"/>
+		        </fileset>
+		    </batchtest>
+		</junit>
+		
+	<!--	<echo message="Junit Classpath: ${junit.classpath}" />
+		<junit printsummary="yes" haltonfailure="yes">
+			<classpath>
+				<path refid="compileclasspath" />
+			</classpath>
+			<batchtest todir="c:/temp" unless="test">
+				<fileset dir="${bin}/test/com">
+					<include name="**/*Test.java" />
+					<exclude name="**/AllTests.java" />
+				</fileset>
+			</batchtest>
+		</junit> -->
+	</target>
+
+</project>
