@@ -80,7 +80,7 @@
 			<fileset dir="${src}" includes="**/*.java" />
 		</jar>
 		
-		<taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" />
+		<taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" classpath="${lib}/pmd-4.2.6.jar" />
 		<cpd minimumTokenCount="50" outputFile="${build.dir}/cpd.txt">
 			<fileset dir="${basedir}/src">
 				<include name="**/*.java"/>
@@ -98,7 +98,7 @@
 
 
 	<target name="pmd">
-		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask"/>
+		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpath="${lib}/pmd-4.2.6.jar"/>
 		
 		<pmd shortFilenames="true">
 			<ruleset>style/rulesets.xml</ruleset>
